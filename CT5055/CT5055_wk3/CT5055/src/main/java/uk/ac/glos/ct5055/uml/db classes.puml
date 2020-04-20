@@ -1,0 +1,123 @@
+@startuml
+skinparam linetype ortho
+hide circle
+entity "overview_tasks" {
+    * task_id: number <<generated>>
+    --
+    * task_type: number
+}
+
+entity "desc_account_type" {
+    * account_type_id: number <<generated>>
+    --
+    * account_type_desc: varchar(128)
+}
+
+entity "desc_actions" {
+    * action_id: number <<generated>>
+    --
+    * action_description: varchar(128)
+}
+
+entity "desc_bowsers" {
+    * type_id: number <<generated>>
+    * type_name: varchar(128)
+    --
+    capacity: number
+    deployed: number
+    inventory: number
+}
+
+entity "desc_departments" {
+    * department_id: number <<generated>>
+    --
+    * department_desc: varchar(128)
+}
+
+entity "locations" {
+    * location_id: number <<generated>>
+    --
+    * location_name: varchar(256)
+    * location_x: double
+    * location_y: double
+    * department_id: number <<FK desc_departments>>
+}
+
+entity "login" {
+    * user_id: number <<generated>>
+    --
+    * first_name: varchar(128)
+    * last_name: varchar(128)
+    * password: varchar(256)
+    * email: varchar(256)
+    * account_type_id: number <<FK account_type_desc>>
+}
+
+entity "overview_bowsers" {
+    * bowser_id: number <<generated>>
+    --
+    * bowser_type: number <<FK desc_bowsers>>
+    * bowser_location: number <<FK locations>>
+    * last_serviced: timestamp
+    * last_refilled: timestamp
+}
+
+entity "overview_shifts" {
+    * shift_id: number <<generated>>
+    * shift_name: varchar(128)
+    --
+    shift_start: time
+    shift_end: time
+}
+
+entity "overview_teams" {
+    * team_id: number <<generated>>
+    * team_name: varchar(128)
+    --
+    team_capacity: number
+}
+
+entity "overview_workers" {
+    * user_id: number <<FK login>>
+    --
+    shift_id: number <<FK overview_shifts>>
+    team_id: number <<FK overview_teams>>
+}
+
+entity "tasks_maintenance" {
+    * task_id: number <<FK task>>
+    --
+    * location_id: number <<FK locations>>
+    * action_id: number <<FK desc_actions>>
+    * time_assigned: timestamp
+    * completed: boolean
+    team_id: number <<FK overview_teams>>
+}
+
+entity "tasks_volunteers" {
+    * task_id: number <<FK task>>
+    --
+    * user_id: number <<FK login>>
+    * location_id: number <<FK locations>>
+    * time_assigned: timestamp
+    * completed: boolean
+}
+
+"overview_tasks" --- "tasks_maintenance"
+"overview_tasks" --- "tasks_volunteers"
+"tasks_volunteers" }o-- "locations"
+"tasks_volunteers" }o-- "login"
+"tasks_maintenance" }o-- "locations"
+"tasks_maintenance" }o-- "login"
+"tasks_maintenance" }o-- "desc_actions"
+"tasks_maintenance" }o-- "overview_teams"
+"login" --- "overview_workers"
+"overview_teams" --|{ "overview_workers"
+"overview_shifts" --o{ "overview_workers"
+"locations" --o{ "overview_bowsers"
+"desc_bowsers" --o{ "overview_bowsers"
+"desc_account_type" --o{ "login"
+"desc_departments" --o{ "locations"
+"desc_departments" --|{ "locations"
+
+@enduml

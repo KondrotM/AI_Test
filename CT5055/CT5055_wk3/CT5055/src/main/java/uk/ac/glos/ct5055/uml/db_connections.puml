@@ -1,0 +1,84 @@
+@startuml
+hide circle
+hide member
+'skinparam linetype ortho
+
+entity "Account Type" {
+}
+
+entity "Action" {
+}
+
+entity "Bowser Inventory" {
+}
+
+entity "Department" {
+}
+
+entity "Location" {
+}
+
+entity "User" {
+}
+
+entity "Bowser Inventory" {
+}
+
+entity "Shift" {
+}
+
+entity "Team" {
+}
+
+entity "Worker" {
+}
+
+entity "Maintenance Task" {
+}
+
+entity "Volunteer Task" {
+}
+"Task" --|> "Maintenance Task"
+"Task" --|> "Volunteer Task"
+
+
+"Maintenance Task" "*" *-- "0..1" "Deployed Bowser"
+"Maintenance Task" "*" *-- "0..1" "Team"
+"Maintenance Task" "*" *-- "1" "Location"
+"Maintenance Task" "*" *-- "1" "Action"
+
+"Volunteer Task" "*" *-- "1" "Location"
+note left
+    Location is used for both
+    maintenance and volunteer
+    tasks, as it defines where
+    they go.
+end note
+"Volunteer Task" "*" *-- "0..1"Volunteer
+
+"Location" "*" *-- "1" Department
+"Deployed Bowser" "*" *-- "1" "Bowser Inventory"
+note right
+    Deployed bowsers need to have
+    attributes filled relating to
+    condition and water level, while
+    undeployed bowsers need types
+    and quantity remaining
+end note
+
+
+"Team" "1" *-- "*" "Worker"
+"Worker" "*"  *-- "1" "Shift"
+
+"Worker" --|> "User"
+"Volunteer" --|> "User"
+"Manager" --|> "User"
+"Citizen" --|> "User"
+"Special Needs" --|> "User"
+note left
+    all user types are handled within the same login table
+end note
+
+"User" "*" *-- "1" "Account Type"
+
+@enduml
