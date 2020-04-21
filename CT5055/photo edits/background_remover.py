@@ -46,7 +46,7 @@ def getImage(path, filename):
 
 def main():
 	pixCount = {}
-	filepath = r'E:/scripts/set1/'
+	filepath = r'C:/Users/ashbeck/Documents/Code/scripts/set1/'
 	for month in range(1, 12):
 		if month in [1,3,5,7,8,10,12]:
 			if month < 10:
