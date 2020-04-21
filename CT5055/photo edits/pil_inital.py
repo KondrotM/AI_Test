@@ -1,5 +1,6 @@
 from PIL import Image
 import colorsys
+import pandas as pd
 
 
 im = Image.open(r'E:/scripts/set1/20190101_0000.jpg', 'r')

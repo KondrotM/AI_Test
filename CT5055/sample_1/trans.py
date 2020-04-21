@@ -3,6 +3,7 @@ import colorsys
 import json
 import numpy as np
 # import pandas as pd
+import pdb
 
 months  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
@@ -19,15 +20,6 @@ colours = [(50,50,255,255), # blue
 ]
 
 dataCSV = {
-	'filename' : {
-		'pixNo' : 0,
-		'bluePix' : 0,
-		'light_bluePix': 0,
-		'olivePix' : 0,
-		'yellowPix' : 0,
-		'redPix' : 0
-
-	}
 }
 
 list_of_colors = [[255,0,0],[150,33,77],[75,99,23],[45,88,250],[250,0,255]]
@@ -41,8 +33,14 @@ def getImage(path, filename):
 
 	width, height = img.size
 
+	dataCSV[filename[:-4]] = {}
+	dataCSV[filename[:-4]]['pix'] = 0
+
+	for i in colours:
+		dataCSV[filename[:-4]][str(i)] = 0
 	for y in range(height):
 		for x in range(width):
+
 			check1 = False
 			check2 = False
 			check3 = False
@@ -56,20 +54,27 @@ def getImage(path, filename):
 			if check1 and check2 and check3:
 				pixdata[x, y] = (255,255,255,0)
 			else:
-				print(pixdata[x,y])
+				# print(pixdata[x,y])
 				pixdata[x,y] = closest(colours, pixdata[x,y])
-				print('closest ' + str(pixdata[x,y]))
+				if pixdata[x,y] == (255,255,255,0):
+					pass
+				else:
+					dataCSV[filename[:-4]][str(pixdata[x,y])] += 1
+					dataCSV[filename[:-4]]['pix'] += 1
+					# pdb.set_trace()
+				# print('closest ' + str(pixdata[x,y]))
 
 	path = r'./edited/'+filename[:-4]+'.png'
 	img.save(path, 'PNG')
+	dataJson = json.dumps(dataCSV)
+	f = open('data.json','w')
+	f.write(dataJson)
+	f.close()
+		# json.dump(dataCSV, outfile)
+	print('done')
 
-
-
-	dataCSV[filename[:-4]] = {}
-
-
-
-
+	# pd.read_json(json.dumps(dataCSV)).to_csv('pandas.csv')
+	# dataCSV.to_csv('dict.csv', index = None)
 
 # code from https://stackoverflow.com/a/54244301/13095638
 def closest(colors,color):
@@ -78,15 +83,76 @@ def closest(colors,color):
     distances = np.sqrt(np.sum((colors-color)**2,axis=1))
     index_of_smallest = np.where(distances==np.amin(distances))
     smallest_distance = colors[index_of_smallest]
-    return tuple(smallest_distance.reshape(1, -1)[0])
+    tpl = tuple(smallest_distance.reshape(1, -1)[0])
+    if len(tpl) > 4:
+    	tpl = tpl[:3]
+    if tpl == (255,255,255,255):
+    	tpl = (255,255,255,0)
+    return tpl
     # return tuple(map(tuple, smallest_distance))
 
-closest_color = closest(colours,color)
-print(closest_color)
+def main():
+	filepath = r'./unedited/'
+	for month in range(1, 12):
+		if month in [1,3,5,7,8,10,12]:
+			if month < 10:
+				pathMonth = '0%s' % (month)
+			else:
+				pathMonth = month
 
+			for day in range(1, 32):
+				if day < 10:
+					pathDay = '0%s' % (day)
+				else:
+					pathDay = day
+				for hour in hours:
+					print('Opening Image...')
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					try:
+						getImage(filepath, filename)
+					except:
+						print("Error Occurred")
+		elif month in [4,6,9,11]:
+			if month < 10:
+				pathMonth = '0%s' % (month)
+			else:
+				pathMonth = month
+
+			for day in range(1, 31):
+				if day < 10:
+					pathDay = '0%s' % (day)
+				else:
+					pathDay = day
+				for hour in hours:
+					print('Opening Image...')
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					try:
+						getImage(filepath, filename)
+					except:
+						print("Error Occurred")
+		elif month in [2]:
+			if month < 10:
+				pathMonth = '0%s' % (month)
+			else:
+				pathMonth = month
+
+			for day in range(1, 29):
+				if day < 10:
+					pathDay = '0%s' % (day)
+				else:
+					pathDay = day
+				for hour in hours:
+					print('Opening Image...')
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					try:
+						getImage(filepath, filename)
+					except:
+						print("Error Occurred")
 # print(dataCSV['filename']['bluePix'])
 
 # filename = 'wong.png'
 # print(filename[:-4])
 
-getImage(r'./unedited/','20190501_0000.jpg')
+main()
+
+# getImage(r'./unedited/','20190501_0000.jpg')
