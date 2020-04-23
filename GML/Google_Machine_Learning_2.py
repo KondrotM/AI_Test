@@ -15,7 +15,9 @@ test_idx = [0,50,100]
 #training data
 #deletes the testing data from the training data
 train_target = np.delete(iris.target, test_idx)
+print(train_target)
 train_data = np.delete(iris.data, test_idx, axis = 0)
+print(train_data)
 
 #testing data
 test_target = iris.target[test_idx]
@@ -26,7 +28,7 @@ clf = clf.fit(train_data, train_target)
 
 #two prints compare the actual values from the data predicted values
 print (test_target)
-
+print (test_data)
 print (clf.predict(test_data))
 
 
