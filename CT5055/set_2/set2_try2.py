@@ -25,6 +25,7 @@ def clean(url):
 		'measure' : [],
 		'value' : []
 	}
+	pdb.set_trace()
 	response = urllib.request.urlopen(url)
 	csvfile = csv.reader(codecs.iterdecode(response, 'utf-8'))
 	# response = requests.get(url, stream=True)

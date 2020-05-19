@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn import tree
 import json
 import matplotlib.pyplot as plt
+import pdb
 
 def findSampleDifferences(labels, samples):
 	print(samples)
@@ -75,7 +76,7 @@ def main():
 	# 	test_data.append(train_data.pop(i))
 
 
-
+	pdb.set_trace()
 	print('Training Tree...')
 	clf = tree.DecisionTreeRegressor()
 	clf = clf.fit(train_data, train_target)

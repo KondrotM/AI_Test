@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn import tree
+from sklearn.tree import export_graphviz
 import json
 import matplotlib.pyplot as plt
 
@@ -22,6 +23,15 @@ def findSampleDifferences(labels, samples):
 			input('Press Enter to Continue') 
 		# print(sampleDt, labelDt)
 
+colours = ['pix',(50,50,255,255), # blue
+(100,150,255,255), # light_blue
+(150,150,50,255), # olive
+(247,247,150,255), # yellow
+(255,200,50,255), # orange
+(255,50,50,255), # red
+(255,50,255,255), # purple
+(255,255,255,255) # white
+]
 
 def main():
 	print('Getting Train Target...')
@@ -67,7 +77,7 @@ def main():
 
 
 	print('Training Tree...')
-	clf = tree.DecisionTreeRegressor(max_depth=10)
+	clf = tree.DecisionTreeRegressor(max_depth = 5, min_samples_leaf = 4)
 	clf = clf.fit(train_data, train_target)
 	# print(test_target)
 	# print(test_data)
@@ -87,6 +97,18 @@ def main():
 	print(finalDf['difference'].abs().sum()/len(finalDf))
 
 	finalDf[['test target', 'predicted']].plot()
+	plt.ylabel('Average Rainfall mm')
+	plt.title('Graph to Show Average Rainfall over Time \nCompared with a Regression Algorithm')
+
+	export_graphviz(
+		clf,
+		out_file = 'tree-5.dot',
+		feature_names= colours,
+		filled = True)
+
+
 	plt.show()
+
+
 
 main()
