@@ -64,12 +64,12 @@ def getImage(path, filename):
 					# pdb.set_trace()
 				# print('closest ' + str(pixdata[x,y]))
 
-	path = r'./edited/'+filename[:-4]+'.png'
+	path = r'./thumbnails/edited/'+filename[:-4]+'.png'
 	img.save(path, 'PNG')
-	dataJson = json.dumps(dataCSV)
-	f = open('data.json','w')
-	f.write(dataJson)
-	f.close()
+	# dataJson = json.dumps(dataCSV)
+	# f = open('data.json','w')
+	# f.write(dataJson)
+	# f.close()
 		# json.dump(dataCSV, outfile)
 	print('done')
 
@@ -92,7 +92,7 @@ def closest(colors,color):
     # return tuple(map(tuple, smallest_distance))
 
 def main():
-	filepath = r'./unedited/'
+	filepath = r'./thumbnails/'
 	for month in range(1, 12):
 		if month in [1,3,5,7,8,10,12]:
 			if month < 10:
@@ -107,7 +107,7 @@ def main():
 					pathDay = day
 				for hour in hours:
 					print('Opening Image...')
-					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.thumbnail.png'
 					try:
 						getImage(filepath, filename)
 					except:
@@ -125,7 +125,7 @@ def main():
 					pathDay = day
 				for hour in hours:
 					print('Opening Image...')
-					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.thumbnail.png'
 					try:
 						getImage(filepath, filename)
 					except:
@@ -143,7 +143,7 @@ def main():
 					pathDay = day
 				for hour in hours:
 					print('Opening Image...')
-					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.jpg'
+					filename = '2019' + str(pathMonth) + str(pathDay) + '_' + str(hour) + '.thumbnail.png'
 					try:
 						getImage(filepath, filename)
 					except:
